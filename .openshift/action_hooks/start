@@ -1,0 +1,10 @@
+#!/bin/bash
+# The logic to start up your application should be put in this
+# script. The application will work only if it binds to
+# $OPENSHIFT_PYTHON_IP:8080
+
+SOLR_VERSION=5.0.0
+SOLR_PATH=${OPENSHIFT_REPO_DIR}solr-${SOLR_VERSION}/
+export PATH=${SOLR_PATH}bin/:$PATH
+
+solr start 

@@ -1,0 +1,2 @@
+sorl-standalone-openshift
+-------------------------

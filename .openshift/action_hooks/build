@@ -1,0 +1,48 @@
+#!/bin/bash
+# This is a simple build script and will be executed on your CI system if 
+# available.  Otherwise it will execute while your application is stopped
+# before the deploy step.  This script gets executed directly, so it
+# could be python, php, ruby, etc
+
+SOLR_VERSION=5.0.0
+SOLR_FILE_TGZ=solr-${SOLR_VERSION}.tgz
+SOLR_URL=http://mirrors.advancedhosters.com/apache/lucene/solr/${SOLR_VERSION}/${SOLR_FILE_TGZ}
+SOLR_PATH=${OPENSHIFT_REPO_DIR}solr-${SOLR_VERSION}/
+SOLR_JETTY_XML=${SOLR_PATH}server/etc/jetty.xml
+SOLR_SCRIPT=${SOLR_PATH}bin/solr
+SOLR_IP=localhost
+SOLR_PORT=16009
+
+if [ ${OPENSHIFT_NODEJS_IP} ]; then
+	SOLR_IP=${OPENSHIFT_NODEJS_IP}
+fi
+
+if [ ${OPENSHIFT_PYTHON_IP} ]; then
+	SOLR_IP=${OPENSHIFT_PYTHON_IP}
+fi
+
+if [ ${OPENSHIFT_INTERNAL_IP} ]; then
+	SOLR_IP=${OPENSHIFT_INTERNAL_IP}
+fi
+
+if [ ${OPENSHIFT_PHP_IP} ]; then
+	SOLR_IP=${OPENSHIFT_PHP_IP}
+fi
+
+if [ ${OPENSHIFT_JBOSSEWS_IP} ]; then
+	SOLR_IP=${OPENSHIFT_JBOSSEWS_IP}
+fi
+
+wget ${SOLR_URL} -P ${OPENSHIFT_TMP_DIR}
+tar zxvf ${OPENSHIFT_TMP_DIR}${SOLR_FILE_TGZ} -C ${OPENSHIFT_REPO_DIR}
+
+sed -e "s|jetty\.host|jetty\.host\" default=\"$SOLR_IP|g" \
+    -e "s|8983|${SOLR_PORT}|g" ${SOLR_JETTY_XML} > ${SOLR_JETTY_XML}.tmp 
+
+mv ${SOLR_JETTY_XML}.tmp ${SOLR_JETTY_XML}
+
+sed -e "s|localhost|${SOLR_IP}|g" \
+    -e "s|SOLR_PORT=\"8983\"|SOLR_PORT=\"${SOLR_PORT}\"|g" ${SOLR_SCRIPT} > ${SOLR_SCRIPT}.tmp 
+
+mv ${SOLR_SCRIPT}.tmp ${SOLR_SCRIPT}
+chmod +x ${SOLR_SCRIPT}
