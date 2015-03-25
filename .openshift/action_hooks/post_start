@@ -1,9 +1,9 @@
 #!/bin/bash
-# The logic to start your application should be put in this script.
+# The logic to start solr.
 
 SOLR_VERSION=5.0.0
 SOLR_PATH=${OPENSHIFT_REPO_DIR}solr-${SOLR_VERSION}/
 export PATH=${SOLR_PATH}bin/:$PATH
 
 echo -e "Starting solr-${SOLR_VERSION}"
-solr start 
+solr start

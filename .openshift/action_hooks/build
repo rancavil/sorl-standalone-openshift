@@ -47,8 +47,3 @@ sed -e "s|localhost|${SOLR_IP}|g" \
 
 mv ${SOLR_SCRIPT}.tmp ${SOLR_SCRIPT}
 chmod +x ${SOLR_SCRIPT}
-
-sed -e "s|localhost|${SOLR_IP}|g" ${SOLR_POST_SCRIPT} > ${SOLR_POST_SCRIPT}.tmp
-
-mv ${SOLR_POST_SCRIPT}.tmp ${SOLR_POST_SCRIPT}
-chmod +x ${SOLR_POST_SCRIPT}
