@@ -10,6 +10,7 @@ SOLR_URL=http://mirrors.advancedhosters.com/apache/lucene/solr/${SOLR_VERSION}/$
 SOLR_PATH=${OPENSHIFT_REPO_DIR}solr-${SOLR_VERSION}/
 SOLR_JETTY_XML=${SOLR_PATH}server/etc/jetty.xml
 SOLR_SCRIPT=${SOLR_PATH}bin/solr
+SOLR_POST_SCRIPT=${SOLR_PATH}bin/post
 SOLR_IP=localhost
 SOLR_PORT=16009
 
@@ -46,3 +47,8 @@ sed -e "s|localhost|${SOLR_IP}|g" \
 
 mv ${SOLR_SCRIPT}.tmp ${SOLR_SCRIPT}
 chmod +x ${SOLR_SCRIPT}
+
+sed -e "s|localhost|${SOLR_IP}|g" ${SOLR_POST_SCRIPT} > ${SOLR_POST_SCRIPT}.tmp
+
+mv ${SOLR_POST_SCRIPT}.tmp ${SOLR_POST_SCRIPT}
+chmod +x ${SOLR_POST_SCRIPT}
